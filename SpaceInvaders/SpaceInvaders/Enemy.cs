@@ -4,26 +4,30 @@ namespace SpaceInvaders
 {
     public class Enemy : SpaceShip
     {
+        private int _randomChanceToShoot = 50;
+        private Random _rnd = new Random();
+        
+        public static ConsoleColor color = ConsoleColor.Red;
         public Enemy(Game game, int x, int y)
         {
             display = "[ <> ]";
-            color = ConsoleColor.Red;
-            width = 6;
-            speed = 6;
 
-            X = 0;
-            Y = 2;
+            X = x*width;
+            Y = y;
 
 
         }
-        public override void Colide(Entity colider)
+        public override void Colide(Game game, Bullet colider)
         {
-            //TODO
+            game.DestroyEntity(colider);
+            game.DestroyEntity(this);
         }
 
         public override void Update(Game game)
         {
-            //TODO
+            int chanceToShoot = _rnd.Next(_randomChanceToShoot);
+            if(chanceToShoot == 0)
+                Shoot(game, this);
         }
     }
 }

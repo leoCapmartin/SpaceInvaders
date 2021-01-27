@@ -5,20 +5,20 @@ namespace SpaceInvaders
     public class PLayer : SpaceShip
     {
         public int lives = 3;
-        public bool dead = false;
+        
+        public ConsoleColor color;
         public PLayer(Game game)
         {
             display = "[ || ]";
-            width = 6;
-            speed = 6;
             color = ConsoleColor.White;
-            X = game.GetBoardWith() / 2 - width / 2;
+            X = (game.GetBoardWith() / 12) * width;
             Y = game.GetBoardHeight() -2;
         }
         
-        public override void Colide(Entity colider)
+        public override void Colide(Game game, Bullet colider)
         {
-            
+            lives--;
+            game.DestroyEntity(colider);
         }
 
         public override void Update(Game game)

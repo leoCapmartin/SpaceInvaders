@@ -2,9 +2,23 @@ namespace SpaceInvaders
 {
     public abstract class SpaceShip : Entity
     {
-        protected void Shoot(Game game, Axis axis, Direction direction)
+        public static int width = 6;
+        protected void Shoot(Game game, SpaceShip shooter)
         {
-            //TODO
+            string rep;
+            Direction direction;
+            if (shooter is PLayer)
+            {
+                rep = "||";
+                direction = Direction.Backward;
+            }
+            else
+            {
+                rep = "\\/";
+                direction = Direction.Forward;
+            }
+            game.bullets.Add(new Bullet(X+2, Y, direction, rep));
         }
+        
     }
 }

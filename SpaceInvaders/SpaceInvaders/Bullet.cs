@@ -5,29 +5,47 @@ namespace SpaceInvaders
     public class Bullet : Entity
     {
         private Axis _axis;
-        private Direction _direction;
+        public Direction direction;
         
-        public Bullet(int x, int y, Axis axis, Direction direction, string rep)
+        public static int width = 2;
+        public static ConsoleColor color = ConsoleColor.Yellow;
+        
+        public Bullet(int x, int y, Direction dir, string rep)
         {
             X = x;
             Y = y;
-            _axis = axis;
-            _direction = direction;
+            _axis = Axis.Y;
+            direction = dir;
             
-            speed = 1;
             display = rep;
-            width = rep.Length;
-            color = ConsoleColor.Yellow;
         }
 
-        public override void Colide(Entity colider)
-        {
-            //TODO
-        }
 
         public override void Update(Game game)
         {
-            //TODO
+            Move(game, _axis, direction);
+            if (X - 2 == game.player.X && Y == game.player.Y && direction == Direction.Forward)
+                game.player.Colide(game, this);
+            
+
+            foreach (Enemy enemy in game.enemies)
+            {
+                if (X - 2 == enemy.X && Y == enemy.Y && direction == Direction.Backward)
+                    enemy.Colide(game, this);
+            }
+
+            foreach (Bullet bullet in game.bullets)
+            {
+                if(X == bullet.X && Y == bullet.Y && direction != bullet.direction)
+                    bullet.Colide(game, this);
+            }
+            
+            if(Y > game.GetBoardHeight() - 2 || Y < 2)
+                game.DestroyEntity(this);
+        }
+        public override void Colide(Game game, Bullet colider)
+        {
+            game.DestroyEntity(colider);
         }
     }
 }

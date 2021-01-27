@@ -7,29 +7,37 @@ namespace SpaceInvaders
         public static void printBoard(Game game)
         {
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Green;
             
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.SetCursorPosition(0,0);
-            Console.Write("Score : " + game.score);
+            Console.Write("Wave : " + game.wave);
             
             Console.SetCursorPosition(0, game.GetBoardHeight());
             Console.Write("Lives : " + game.player.lives);
+            
+            string time = "Time : " + game.time;
+            Console.SetCursorPosition(game.GetBoardWith()/2 - time.Length/2, game.GetBoardHeight());
+            Console.Write(time);
 
             Console.ForegroundColor = game.player.color;
             Console.SetCursorPosition(game.player.X, game.player.Y);
             Console.Write(game.player.display);
             
+            
+            Console.ForegroundColor = Enemy.color;
             foreach (Enemy enemy in game.enemies)
             {
-                Console.SetCursorPosition(enemy.X, enemy.Y);
-                Console.ForegroundColor = enemy.color;
-                Console.Write(enemy.display);
+                if (enemy.Y >= 2 )
+                {
+                    Console.SetCursorPosition(enemy.X, enemy.Y);
+                    Console.Write(enemy.display);
+                }
             }
-
+            
+            Console.ForegroundColor = Bullet.color;    
             foreach (Bullet bullet in game.bullets)
             {
                 Console.SetCursorPosition(bullet.X, bullet.Y);
-                Console.ForegroundColor = bullet.color;
                 Console.Write(bullet.display);
             }
             

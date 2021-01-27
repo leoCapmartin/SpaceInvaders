@@ -1,4 +1,4 @@
-using System;
+using System.Threading;
 using System.Collections.Generic;
 
 namespace SpaceInvaders
@@ -8,7 +8,9 @@ namespace SpaceInvaders
         public List<Enemy> enemies;
         public PLayer player;
         public List<Bullet> bullets;
-        public int score;
+        private List<Entity> _destroyList;
+        public int wave;
+        public int time;
 
         private int _boardWidth;
         private int _boardHeight;
@@ -23,23 +25,11 @@ namespace SpaceInvaders
             return _boardHeight;
         }
 
-        private void AddWave()
+        private void AddWave(int y)
         {
-            int x = 0;
-            int y = 0;
-            int offset = 6;
-            for (int i = 0; i < 10; i++)
-            {
-                enemies.Add(new Enemy(this,x+offset, y+offset));
-                if (x+offset >= _boardHeight-offset)
-                {
-                    x = 0;
-                    y++;
-                }
-                else
-                    x++;
-                
-            }
+            for (int i = 0; i < _boardWidth/SpaceShip.width-4; i++)
+                enemies.Add(new Enemy(this,i+2, y));
+            
         }
 
         public Game (int x, int y)
@@ -50,30 +40,69 @@ namespace SpaceInvaders
             enemies = new List<Enemy>();
             player = new PLayer(this);
             bullets = new List<Bullet>();
-            
+            _destroyList = new List<Entity>();
+
             //Console.SetWindowSize(x,y);
             Printer.printBoard(this);
         }
 
+        private void Update()
+        {
+            foreach (Bullet bullet in bullets)
+                bullet.Update(this);
+                
+            player.Update(this);
+                
+            foreach (Enemy enemy in enemies)
+            {
+                enemy.Update(this);
+            }
+
+            DestroyEntities();
+        }
+
         public void Play()
         {
-            while (!player.dead)
+            int nbOfWaves = 1;
+            while (player.lives > 0)
             {
-                foreach (Bullet bullet in bullets)
-                    bullet.Update(this);
+                for (int i = 0; i < nbOfWaves; i++)
+                    AddWave(2*(1-i));
                 
-                player.Update(this);
-                
-                foreach (Enemy enemy in enemies)
-                    enemy.Update(this);
-                
-                
+                while (player.lives > 0 && enemies.Count > 0)
+                {
+                    Update();
+                    time++;
+                    Printer.printBoard(this);
+                    Thread.Sleep(250);
+                }
+
+                nbOfWaves++;
             }
         }
 
-        public void DestroyEntity()
+        public void DestroyEntity(Entity entity)
         {
-            //TODO
+            _destroyList.Add(entity);
+        }
+
+        private void DestroyEntities()
+        {
+            foreach (Entity entity in _destroyList)
+            {
+                if (entity is Bullet)
+                {
+                    Bullet bullet = (Bullet) entity;
+                    bullets.Remove(bullet);
+                }
+                else if (entity is Enemy)
+                {
+                    Enemy enemy = (Enemy) entity;
+                    enemies.Remove(enemy);
+                }
+            }
+            
+            _destroyList.Clear();
         }
     }
 }

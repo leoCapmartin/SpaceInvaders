@@ -8,9 +8,6 @@ namespace SpaceInvaders
         public int X;
         public int Y;
         public string display;
-        public ConsoleColor color;
-        protected int speed;
-        protected int width;
 
         public enum Axis
         {
@@ -25,16 +22,13 @@ namespace SpaceInvaders
 
         protected void Move(Game game, Axis axis, Direction direction)
         {
-            //TODO
+            if (axis == Axis.X)
+                X += (int) direction;
+            else
+                Y += (int) direction;
         }
+        public abstract void Colide(Game game, Bullet colider);
 
-        public static void Spawn(Game game, int x, int y)
-        {
-            //TODO   
-        }
-
-        public abstract void Colide(Entity colider);
-        
         public abstract void Update(Game game);
     }
 }
