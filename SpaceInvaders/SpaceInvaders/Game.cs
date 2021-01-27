@@ -25,8 +25,19 @@ namespace SpaceInvaders
 
         private void AddWave()
         {
-            for (int i = 0; i < 50; i++)
+            int x = 0;
+            int y = 0;
+            int offset = 6;
+            for (int i = 0; i < 10; i++)
             {
+                enemies.Add(new Enemy(this,x+offset, y+offset));
+                if (x+offset >= _boardHeight-offset)
+                {
+                    x = 0;
+                    y++;
+                }
+                else
+                    x++;
                 
             }
         }
