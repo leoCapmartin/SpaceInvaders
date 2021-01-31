@@ -23,7 +23,8 @@ namespace SpaceInvaders
 
         public override void Update(Game game)
         {
-            Move(game, _axis, direction);
+            Move(game, _axis, direction, 0);
+            
             if (X - 2 == game.player.X && Y == game.player.Y && direction == Direction.Forward)
                 game.player.Colide(game, this);
             
@@ -45,7 +46,11 @@ namespace SpaceInvaders
         }
         public override void Colide(Game game, Bullet colider)
         {
-            game.DestroyEntity(colider);
+            if (colider.direction == Direction.Backward)
+                game.DestroyEntity(colider);
+
+            if (direction == Direction.Backward)
+                game.DestroyEntity(this);
         }
     }
 }

@@ -20,10 +20,13 @@ namespace SpaceInvaders
             Backward = -1
         }
 
-        protected void Move(Game game, Axis axis, Direction direction)
+        protected void Move(Game game, Axis axis, Direction direction, int width)
         {
             if (axis == Axis.X)
-                X += (int) direction;
+            {
+                if (X + (int) direction * (width*2) <= game.GetBoardWith() && X + (int) direction * width >= 0)
+                    X += (int) direction * width;
+            }
             else
                 Y += (int) direction;
         }

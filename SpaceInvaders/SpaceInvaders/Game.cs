@@ -9,6 +9,7 @@ namespace SpaceInvaders
         public PLayer player;
         public List<Bullet> bullets;
         private List<Entity> _destroyList;
+        private long _frame;
         public int wave;
         public int time;
 
@@ -48,37 +49,45 @@ namespace SpaceInvaders
 
         private void Update()
         {
-            foreach (Bullet bullet in bullets)
-                bullet.Update(this);
-                
-            player.Update(this);
-                
-            foreach (Enemy enemy in enemies)
+            if (_frame % 250000 == 0)
             {
-                enemy.Update(this);
+                foreach (Bullet bullet in bullets)
+                    bullet.Update(this);
+                    
+                    
+                foreach (Enemy enemy in enemies)
+                {
+                    enemy.Update(this);
+                }
             }
 
+            player.Update(this);
             DestroyEntities();
         }
 
         public void Play()
         {
-            int nbOfWaves = 1;
+            wave = 1;
             while (player.lives > 0)
             {
-                for (int i = 0; i < nbOfWaves; i++)
-                    AddWave(2*(1-i));
+                for (int i = 0; i < wave; i++)
+                    AddWave(i+2);
                 
                 while (player.lives > 0 && enemies.Count > 0)
                 {
                     Update();
-                    time++;
-                    Printer.printBoard(this);
-                    Thread.Sleep(250);
+                    if(_frame % 250000 == 0)
+                    {
+                        Printer.printBoard(this);
+                        time++;
+                    }
+                    _frame++;
                 }
 
-                nbOfWaves++;
+                wave++;
             }
+            
+            Printer.PrintGameOver(this);
         }
 
         public void DestroyEntity(Entity entity)

@@ -44,5 +44,27 @@ namespace SpaceInvaders
             Console.SetCursorPosition(0,game.GetBoardHeight() );
             Console.WriteLine();
         }
+
+        public static void PrintGameOver(Game game)
+        {
+            Console.Clear();
+            
+            string gameOver = "GAME OVER!";
+            string wave = "WAVE : " + (game.wave-1);
+            string time = "TIME : " + game.time;
+            Console.SetCursorPosition(game.GetBoardWith()/2 - gameOver.Length/2, game.GetBoardHeight()/2 - 1);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(gameOver);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            
+            Console.SetCursorPosition(game.GetBoardWith()/2 - wave.Length/2, game.GetBoardHeight()/2);
+            Console.Write(wave);
+            
+            Console.SetCursorPosition(game.GetBoardWith()/2 - time.Length/2, game.GetBoardHeight()/2 + 1);
+            Console.Write(time);
+            
+            Console.SetCursorPosition(0, game.GetBoardHeight());
+        }
     }
 }

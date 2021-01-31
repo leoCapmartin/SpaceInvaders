@@ -8,6 +8,7 @@ namespace SpaceInvaders
         {
             Game game = new Game(100, 30);
             game.Play();
+
         }
     }
 }
